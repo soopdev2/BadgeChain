@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <title>Badge Hyperledger App</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 30px;
+                background: #f8f9fa;
+            }
+            h1 {
+                color: #2c3e50;
+            }
+            form {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                width: 400px;
+            }
+            label {
+                display: block;
+                margin-top: 10px;
+                font-weight: bold;
+            }
+            input, textarea {
+                width: 100%;
+                padding: 8px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            button {
+                margin-top: 15px;
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            button:hover {
+                background: #0056b3;
+            }
+            .result {
+                margin-top: 15px;
+                padding: 10px;
+                background: #ecf0f1;
+                border-radius: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Badge Hyperledger App</h1>
+
+        <!-- Form per emettere un badge -->
+        <form id="issueForm" method="post" action="IssueBadgeServlet">
+            <h2>Emetti un nuovo badge</h2>
+            <label for="name">Nome Badge</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="description">Descrizione</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="issuer">Issuer</label>
+            <input type="text" id="issuer" name="issuer" required>
+
+            <label for="recipient">Recipient</label>
+            <input type="text" id="recipient" name="recipient" required>
+
+            <button type="submit">Genera Badge</button>
+        </form>
+
+        <!-- Form per ricercare un badge -->
+        <form id="queryForm" method="post" action="queryBadgeServlet">
+            <h2>Verifica un badge</h2>
+            <label for="id">ID Badge</label>
+            <input type="text" id="id" name="id" required>
+
+            <button type="submit">Cerca</button>
+        </form>
+
+    </body>
+</html>
