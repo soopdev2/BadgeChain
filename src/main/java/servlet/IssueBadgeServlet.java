@@ -22,21 +22,29 @@ public class IssueBadgeServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         try {
-            // Parametri dal client
             String name = req.getParameter("name");
             String description = req.getParameter("description");
             String issuer = req.getParameter("issuer");
             String recipient = req.getParameter("recipient");
 
-            // Genera badge (immagine + JSON + hash)
             File imgFile = File.createTempFile("badge_", ".png");
             File jsonFile = File.createTempFile("badge_", ".json");
             Badge badge = BadgeGenerator.generate(name, description, issuer, recipient, imgFile, jsonFile);
 
-            // Connessione a Fabric
-            Path walletPath = Paths.get("wallet");
+            Path walletPath = Paths.get("C:", "Users", "Salvatore", "Desktop", "BadgeChain", "wallet");
+
             Wallet wallet = Wallets.newFileSystemWallet(walletPath);
-            Path networkConfigPath = Paths.get("..", "test-network", "organizations",
+
+            String identityName = "appUser";
+            boolean identityFound = wallet.get(identityName) != null;
+            System.out.println("DEBUG: Wallet path: " + walletPath.toAbsolutePath());
+            System.out.println("DEBUG: Identity '" + identityName + "' found in wallet: " + identityFound);
+
+            if (!identityFound) {
+                System.err.println("FATAL DEBUG: The identity '" + identityName + "' is missing! Check wallet initialization logic.");
+            }
+
+            Path networkConfigPath = Paths.get("C:", "Users", "Salvatore", "Desktop", "fabric-samples", "test-network", "organizations",
                     "peerOrganizations", "org1.example.com", "connection-org1.yaml");
 
             Gateway.Builder builder = Gateway.createBuilder()
@@ -48,12 +56,10 @@ public class IssueBadgeServlet extends HttpServlet {
                 Network network = gateway.getNetwork("mychannel");
                 Contract contract = network.getContract("badge-contract");
 
-                // Registra l'hash del badge
                 contract.submitTransaction("issueBadge",
                         badge.id, badge.jsonHash, badge.issuer, badge.recipient);
             }
 
-            // Risposta JSON al client
             resp.getWriter().write(mapper.writeValueAsString(badge));
 
         } catch (Exception e) {
