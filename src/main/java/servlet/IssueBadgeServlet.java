@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 
 public class IssueBadgeServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     private final ObjectMapper mapper = new ObjectMapper();
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
